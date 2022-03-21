@@ -12,8 +12,8 @@
         "node": ">=16.0.0"
     },
     "scripts": {
-        "start": "node ./bin/www",
-        "dev": "nodemon ./bin/www",
+        "start": "node app.js",
+        "dev": "nodemon app.js",
         "test": "mocha --exit test/*.test.js",
         "deps": "rm -rf node_modules && npm install"
     },

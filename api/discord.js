@@ -69,7 +69,7 @@ const start = async () => {
     await client.login(token)
 }
 
-const index = async (event, context, callback) => {
+const listen = async (event, context, callback) => {
     await start()
 
     response.statusCode = 200
@@ -114,8 +114,7 @@ const sendMessage = async (notification) => {
 }
 
 module.exports = {
-    index,
+    listen,
     authorize,
-    sendMessage,
-    start
+    sendMessage
 }
