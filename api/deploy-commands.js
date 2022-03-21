@@ -6,7 +6,7 @@ const { REST } = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v9')
 const { CLIENT_ID, GUILD_ID, DISCORD_KEY } = process.env
 
-const responses = require('./responseHelper')
+const responses = require('../modules/responseHelper')
 const response = responses.success
 const commandsTable = require('../database/commands')
 

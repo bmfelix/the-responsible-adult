@@ -1,6 +1,6 @@
 {
     "name": "discord-bot-adult-exe",
-    "version": "2022.03.15",
+    "version": "0.0.1",
     "description": "The Responsible Adult",
     "author": "Brad Felix",
     "private": true,
@@ -12,7 +12,8 @@
         "node": ">=16.0.0"
     },
     "scripts": {
-        "start": "node app.js",
+        "start": "node ./bin/www",
+        "dev": "nodemon ./bin/www",
         "test": "mocha --exit test/*.test.js",
         "deps": "rm -rf node_modules && npm install"
     },
