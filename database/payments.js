@@ -4,47 +4,44 @@
  * @author Brad Felix <bradfelix1@gmail.com>
  */
 
-// const dynamoosedb = require('./bigtable')
-const Payments = () => {}
+const moment = require('moment')
+const Firestore = require('@google-cloud/firestore')
+const config = require('../config.json')
 
-// Create subscriber model
-// const Payments = dynamoosedb.model('payments',
-//     {
-//         id: {
-//             type: String,
-//             hashKey: true,
-//         },
-//         payment_type: {
-//             type: String,
-//         },
-//         total_due: {
-//             type: Number,
-//         },
-//         num_of_people_paying: {
-//             type: Number,
-//         },
-//         how_often: {
-//             type: String,
-//         },
-//         notification_time: {
-//             type: Number,
-//         },
-//         notification_date: {
-//             type: [String, Number],
-//         },
-//         start_date: {
-//             type: [String, Number],
-//         },
-//         due_date: {
-//             type: [String, Number],
-//         },
-//         created_at: {
-//             type: [String, Number],
-//         },
-//         updated_at: {
-//             type: [String, Number],
-//         }
-//     }
-// )
+const db = new Firestore({
+    projectId: config.PROJECT_ID,
+})
 
-module.exports = Payments
+const doesRecordExist = async (type, table) => {
+    const data = await db.collection(table).where('payment_type', '==', type).get()
+
+    // eslint-disable-next-line no-underscore-dangle
+    if (data._size === 0) {
+        return false
+    }
+
+    return data.data()
+}
+
+const getAllRecords = async () => {
+    const data = await db.collection('payments').get()
+
+    // eslint-disable-next-line no-underscore-dangle
+    if (data._size === 0) {
+        return false
+    }
+
+    return data
+}
+
+const upsertRecord = async (id, object) => {
+    const record = db.collection('payments').doc(id)
+
+    await record.set(object)
+}
+
+module.exports = {
+    doesRecordExist,
+    upsertRecord,
+    getAllRecords
+}

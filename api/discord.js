@@ -10,7 +10,10 @@
 
 const fs = require('fs')
 const { Client, Collection, Intents, MessageEmbed, WebhookClient } = require('discord.js')
-const token = process.env.DISCORD_KEY
+const debug = require('debug')('discord-bot:server')
+const config = require('../config.json')
+
+const token = config.DISCORD_TOKEN
 
 const responses = require('../modules/responseHelper')
 const response = responses.success
@@ -66,16 +69,24 @@ const start = async () => {
         }
     })
 
-    await client.login(token)
+    const resp = await client.login(token)
+
+    return resp
 }
 
-const listen = async (event, context, callback) => {
-    await start()
+const listen = async () => {
+    const resp = await start()
 
-    response.statusCode = 200
-    response.body = JSON.stringify({status: 'ready'})
+    if (resp) {
+        response.statusCode = 200
+        response.body = JSON.stringify({status: 'Ready'})
+        return response
+    }
 
-    return callback(null, response)
+    response.statusCode = 400
+    response.body = JSON.stringify({status: 'Not Ready'})
+
+    return response
 }
 
 const authorize = async (event, context, callback) => {
@@ -104,7 +115,7 @@ const sendMessage = async (notification) => {
             { name: 'Due Date', value: `${notification.due_date}` },
         )
 
-    const webhookClient = new WebhookClient({ id: process.env.WEBHOOK_CLIENT_ID, token: process.env.WEBHOOK_TOKEN })
+    const webhookClient = new WebhookClient({ id: config.WEBHOOK_CLIENT_ID, token: config.WEBHOOK_TOKEN })
 
     webhookClient.send({
         username: 'Adult.exe',

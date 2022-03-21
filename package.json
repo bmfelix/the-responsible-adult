@@ -12,31 +12,32 @@
         "node": ">=16.0.0"
     },
     "scripts": {
-        "start": "node app.js",
-        "dev": "nodemon app.js",
+        "start": "node ./bin/www",
+        "dev": "nodemon ./bin/www",
         "test": "mocha --exit test/*.test.js",
         "deps": "rm -rf node_modules && npm install"
     },
     "dependencies": {
-        "express": "^4.17.1",
         "@discordjs/builders": "^0.12.0",
         "@discordjs/rest": "^0.3.0",
-        "@google-cloud/bigtable": "^3.9.4",
+        "@google-cloud/firestore": "^5.0.2",
         "axios": "^0.23.0",
+        "debug": "^4.3.4",
         "discord-api-types": "^0.29.0",
         "discord.js": "^13.6.0",
+        "errorhandler": "^1.5.0",
+        "express": "^4.17.1",
         "lodash": "^4.17.21",
         "moment": "^2.29.1",
-        "uuid": "^8.3.2",
         "request": "^2.76.0",
-        "errorhandler": "^1.5.0"
+        "uuid": "^8.3.2"
     },
     "devDependencies": {
-        "mocha": "^9.0.0",
-        "supertest": "^6.0.0",
         "eslint": "^8.11.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-plugin-import": "^2.25.4",
-        "nodemon": "^2.0.15"
+        "mocha": "^9.0.0",
+        "nodemon": "^2.0.15",
+        "supertest": "^6.0.0"
     }
 }

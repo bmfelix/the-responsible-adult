@@ -1,9 +1,9 @@
 const moment = require('moment')
 
-const responses = require('./responseHelper')
+const responses = require('../modules/responseHelper')
 const response = responses.success
 const paymentsTable = require('../database/payments')
-const discord = require('../api/discord.js')
+const discord = require('./discord.js')
 
 const doesItRunToday = (date) => {
     const now = moment().date()
@@ -20,20 +20,30 @@ const isSameDayAndMonth = (m1, m2) => {
     return m1.date() === m2.date() && m1.month() === m2.month()
 }
 
-const notifications = async (events, context, callback) => {
+const notifications = async () => {
     if (!discord && !discord.client.isConnected()) {
         await discord.start()
     }
 
-    const payments = await paymentsTable.scan().exec()
+    const payments = await paymentsTable.getAllRecords()
     const processedNotifications = []
     const resp = []
 
+    if (!payments) {
+        response.statusCode = 200
+        response.body = JSON.stringify({message: 'No Records'})
+        return response
+    }
+
     payments.forEach((payment) => {
-        const runToday = doesItRunToday(payment.notification_date)
+        const paymentData = payment.data()
+        const docId = payment.id
+
+        const runToday = doesItRunToday(paymentData.notification_date)
 
         if (runToday) {
-            processedNotifications.push(payment)
+            paymentData.id = docId
+            processedNotifications.push(paymentData)
         }
     })
 
@@ -56,8 +66,7 @@ const notifications = async (events, context, callback) => {
             resp.push(`${updatedNotification.payment_type} notification sent`)
             await sendNotification(updatedNotification)
 
-            delete updatedNotification.id
-            await paymentsTable.update({id: id}, updatedNotification)
+            await paymentsTable.upsertRecord(id, updatedNotification)
         } else {
             resp.push(`${notification.payment_type} notification not sent`)
         }
@@ -65,12 +74,10 @@ const notifications = async (events, context, callback) => {
 
     const message = resp.join('\n')
 
-    console.log(message)
-
     response.statusCode = 200
     response.body = JSON.stringify({message: message})
 
-    return callback(null, response)
+    return response
 }
 
 module.exports = {

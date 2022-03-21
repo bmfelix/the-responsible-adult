@@ -6,5 +6,7 @@
     "WEBHOOK_CLIENT_ID": "953328285255888966",
     "WEBHOOK_TOKEN": "juywx4WIXSb9kRZC8OZw2T2-HI-CT_J_lnn3ofH127831xTE9qtKMiqav_x-SupJ3gMR",
     "PORT": "8081",
-    "ENV": "prod"
+    "ENV": "development",
+    "DEV_GUILD": "952802230162034688",
+    "PROJECT_ID": "pro-habitat-344406"
 }

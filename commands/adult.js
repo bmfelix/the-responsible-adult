@@ -72,23 +72,20 @@ const execute = async (interaction) => {
         notification_date: notificationDate.value
     }
 
-    const filter = {
-        payment_type: {eq: `${dataObject.payment_type}`}
-    }
+    const records = await paymentsTable.doesRecordExist(paymentType.value, 'payments')
 
-    const records = await paymentsTable.scan(filter).limit(1).exec()
-
-    if (records.count !== 0) {
+    if (records) {
         dataObject.updated_at = moment().utc(true).toISOString()
-        await paymentsTable.update({id: records[0].id}, dataObject)
+        await paymentsTable.upsertRecord(records[0].id, dataObject)
 
         await interaction.reply('Your notification has been updated!')
     }
 
-    dataObject.id = uuid()
+    const id = uuid()
+
     dataObject.created_at = moment().utc(true).toISOString()
     dataObject.updated_at = moment().utc(true).toISOString()
-    await paymentsTable.create(dataObject)
+    await paymentsTable.upsertRecord(id, dataObject)
     await interaction.reply('Your notification has been created!')
 }
 
