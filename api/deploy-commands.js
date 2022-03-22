@@ -27,7 +27,7 @@ const upsertCommandRecord = (data) => {
 }
 
 const registerCommands = async () => {
-    rest.put(Routes.applicationGuildCommands(config.CLIENT_ID, config.DEV_GUILD), { body: commands })
+    rest.put(Routes.applicationGuildCommands(config.CLIENT_ID, config.GUILD_ID), { body: commands })
         .then((resp) => {
             upsertCommandRecord(resp)
         })

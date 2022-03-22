@@ -60,13 +60,10 @@ const notifications = async () => {
 
         if (theDay === currentDay && theTime <= currentHour && sameDay && howOften === 'one_time') {
             const updatedNotification = notification
-            const {id} = updatedNotification
 
             updatedNotification.updated_at = moment().utc(true).toISOString()
             resp.push(`${updatedNotification.payment_type} notification sent`)
             await sendNotification(updatedNotification)
-
-            await paymentsTable.upsertRecord(id, updatedNotification)
         } else {
             resp.push(`${notification.payment_type} notification not sent`)
         }

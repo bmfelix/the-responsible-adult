@@ -89,13 +89,10 @@ const listen = async () => {
     return response
 }
 
-const authorize = async (event, context, callback) => {
-    const url = `https://discord.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=${process.env.PERMISSIONS_INT}&scope=bot%20applications.commands`
+const authorize = async () => {
+    const url = `https://discord.com/api/oauth2/authorize?client_id=${config.CLIENT_ID}&permissions=${config.PERMISSIONS_INT}&scope=bot%20applications.commands`
 
-    response.statusCode = 302
-    response.headers.location = url
-
-    return callback(null, response)
+    return url
 }
 
 const sendMessage = async (notification) => {

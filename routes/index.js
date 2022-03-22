@@ -21,6 +21,13 @@ router.get('/listen', async (req, res) => {
     res.status(resp.statusCode).send(JSON.stringify(body)).end()
 })
 
+router.get('/authorize', async (req, res) => {
+    const resp = await discord.authorize(res)
+
+    debug('bot is authorizing')
+    res.redirect(302, resp)
+})
+
 router.get('/register-commands', async (req, res) => {
     const resp = await deployCommands.registerCommands()
     const body = JSON.parse(resp.body)

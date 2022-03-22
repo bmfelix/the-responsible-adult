@@ -74,21 +74,23 @@ const execute = async (interaction) => {
 
     const payments = await paymentsTable.doesRecordExist(paymentType.value, 'payments')
 
-    if (payments) {
+    // eslint-disable-next-line no-underscore-dangle
+    if (payments._size >= 1) {
         payments.forEach(async (payment) => {
             const docId = payment.id
 
             dataObject.updated_at = moment().utc(true).toISOString()
-            await paymentsTable.upsertRecord(docId, dataObject)
+            await paymentsTable.upsertRecord(docId, dataObject, 'update')
             await interaction.reply('Your notification has been updated!')
         })
+        return
     }
 
     const id = uuid()
 
     dataObject.created_at = moment().utc(true).toISOString()
     dataObject.updated_at = moment().utc(true).toISOString()
-    await paymentsTable.upsertRecord(id, dataObject)
+    await paymentsTable.upsertRecord(id, dataObject, 'create')
     await interaction.reply('Your notification has been created!')
 }
 

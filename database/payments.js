@@ -34,10 +34,14 @@ const getAllRecords = async () => {
     return data
 }
 
-const upsertRecord = async (id, object) => {
+const upsertRecord = async (id, object, status) => {
     const record = db.collection('payments').doc(id)
 
-    await record.set(object)
+    if (status === 'create') {
+        await record.set(object)
+    } else {
+        await record.update(object)
+    }
 }
 
 module.exports = {
