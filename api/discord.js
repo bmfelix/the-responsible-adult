@@ -30,7 +30,7 @@ for (const file of commandFiles) {
 
 const start = async () => {
     await client.once('ready', () => {
-        console.log('Ready!')
+        // console.log('Ready!')
     })
 
     client.on('interactionCreate', async (interaction) => {

@@ -8,11 +8,13 @@ const processedNotifications = require('../api/process')
 
 /* GET home page. */
 router.get('/', (req, res) => {
-    res.status(200).send('Hello, world!').end()
+    const message = JSON.stringify({ message: 'discord bot' })
+
+    res.status(200).send(message).end()
 })
 
 router.get('/listen', async (req, res) => {
-    const resp = await discord.listen()
+    const resp = await discord.listen(res)
     const body = JSON.parse(resp.body)
 
     debug('bot is listening')
