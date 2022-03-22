@@ -72,13 +72,16 @@ const execute = async (interaction) => {
         notification_date: notificationDate.value
     }
 
-    const records = await paymentsTable.doesRecordExist(paymentType.value, 'payments')
+    const payments = await paymentsTable.doesRecordExist(paymentType.value, 'payments')
 
-    if (records) {
-        dataObject.updated_at = moment().utc(true).toISOString()
-        await paymentsTable.upsertRecord(records[0].id, dataObject)
+    if (payments) {
+        payments.forEach(async (payment) => {
+            const docId = payment.id
 
-        await interaction.reply('Your notification has been updated!')
+            dataObject.updated_at = moment().utc(true).toISOString()
+            await paymentsTable.upsertRecord(docId, dataObject)
+            await interaction.reply('Your notification has been updated!')
+        })
     }
 
     const id = uuid()

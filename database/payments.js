@@ -20,7 +20,7 @@ const doesRecordExist = async (type, table) => {
         return false
     }
 
-    return data.data()
+    return data
 }
 
 const getAllRecords = async () => {
